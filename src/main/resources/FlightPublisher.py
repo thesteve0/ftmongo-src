@@ -26,8 +26,15 @@ def handler(msg):
         the_flight.putNumber("lat", position_array[1])
         the_flight.putNumber("lon", position_array[0])
         
+        #build the object to persist to mongo
+        forMongo = JsonObject()
+        forMongo.putString("action", "save")
+        forMongo.putString("collection", "buses")
+        forMongo.putObject("document", the_flight)
+        #persist it
+        EventBus.publish('vertx.mongopersistor', forMongo)
 
-
+        #add now to the array
         flights.addObject(the_flight)
 
     #Sent the array on the EventBus - this is the one the page should subscribe to
