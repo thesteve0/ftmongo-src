@@ -8,7 +8,7 @@ Prequisites:
 
 Create a new OpenShift application with a vert.x cartridge
 
-    rhc app create flighttracker jboss-vertx-2.1 -g medium -s
+    rhc app create ftmongo jboss-vertx-2.1 mongodb-2.2 -g medium -s
 
 For best performance and flexibility I used a medium gear and I made it scalable.
 
@@ -25,13 +25,13 @@ Then inside the root of the repository do:
 
     mvn package
 
-This will package up the project into a module. We used a module because there are three
+This will package up the project into a module. I used a module because there are three
 different languages used in the application, JavaScript, Java, and Python. This wasn't required to make
 the project but it was more to demonstrate the polyglot nature of vert.x
 
 To deploy the application go into the new directory called _target_. Take the
 directory titled "com.openshift~vertx-tracking~0.1" and copy it into the _mod_ directory inside the
-git repository _flighttracker_. Then inside the git repository go into the _configuration_ directory
+git repository _ftmongo_. Then inside the git repository go into the _configuration_ directory
 and edit _vertx.env_ file.
 
 Uncomment export vertx_module and make it like this:
@@ -50,7 +50,10 @@ Now you can do
 
 When this is finished you should be able to go to
 
-flighttracker-<yourdomain>.rhcloud.com
+ftmongo-<yourdomain>.rhcloud.com
 
 Remember you may have to wait a few seconds for the first pins to show up because pins aren't drawn
-until a set of flights is pushed from the EventBus to index.html
+until a set of buses is pushed from the EventBus to index.html
+
+_App.js_ loads the mongo persistor module with all the connection environment variables for the application. 
+Inside _FlightPublisher.py_ you can see the code to push the JSON through the persistor into the collection named "buses".
